@@ -2,7 +2,8 @@
 name = input("What's your name? ")
 
 # Say hello to user
-print("Hello,", name)
+print("Hello,")
+print(name)
 
 """
 is a comment
