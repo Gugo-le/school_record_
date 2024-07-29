@@ -12,3 +12,6 @@ else:
 match name:
     case "Harry":
         print("Gryffindor")    
+    
+    case _:
+        print("Who?")    
