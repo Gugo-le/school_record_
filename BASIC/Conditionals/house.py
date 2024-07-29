@@ -6,3 +6,9 @@ elif name == "Draco":
     print("Slytherin")
 else:
     print("Who?")                
+    
+    
+    
+match name:
+    case "Harry":
+        print("Gryffindor")    
