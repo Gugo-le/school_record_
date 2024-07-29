@@ -2,9 +2,4 @@
 name = input("What's your name? ")
 
 # Say hello to user
-print("Hello,", name, sep="???")
-
-
-"""
-is a comment
-"""
+print("hello, {name}")
