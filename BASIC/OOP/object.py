@@ -14,7 +14,9 @@ OOP는 데이터를 어떻게 구조화할지를 알려주고, 데이터를 수�
 
 
 class Puppy:
-    pass
+    def __init__(self):
+        self.name = "Ruffus"
 
 ruffus = Puppy()
-print(ruffus)
+print(ruffus.name)
+
