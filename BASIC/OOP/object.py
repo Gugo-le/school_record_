@@ -12,16 +12,25 @@ OOP는 데이터를 어떻게 구조화할지를 알려주고, 데이터를 수�
 그렇게 되면 같은 수준에서 수많은 딕셔너리로 모두 다른 일을 하는 함수를 갖고 있을 필요가 없어집니다.
 '''
 
-
-class Puppy:
-    def __init__(self, name, breed):
+class Dog:
+    def __init__(self, name, breed, age):
         self.name = name
-        self.age = 0.1
         self.breed = breed
-        
+        self.age = age
+    
+class GuardDog(Dog):
+    def rrrr(self):
+        print("stay away")    
+
+
+class Puppy(Dog):
 
     def __str__(self):        
         return f"Puppy named {self.name}, breed: {self.breed}"
+    
+    def woof_woof(self):
+        print("Woof woof")
+        
 
 ruffus = Puppy(
     name="Ruffus",
@@ -31,5 +40,5 @@ bibi = Puppy(
     name="Bibi",
     breed = "Dalmatian"
 )
-print(bibi)
 
+ruffus.introduce()
