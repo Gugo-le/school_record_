@@ -37,7 +37,6 @@ class Team:
     print(f"Total XP for {self.team_name}: {total}")
 
 
-# Create instances and test the code
 lynn = Player(name='Lynn', xp=100, team="Team Blue")
 
 team_x = Team("Team X")
@@ -48,5 +47,4 @@ team_blue.add_player("Kevin", 300)
 
 team_blue.show_players()
 
-# Calculate and show the total XP
 team_blue.total_xp()
