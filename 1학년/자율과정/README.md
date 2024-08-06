@@ -1,5 +1,8 @@
 # 빅데이터를 활용한 미래 교육 탐구
 
+[PTSD](https://github.com/Gugo-le/PTSD)
+[student-performance-predict](https://github.com/Gugo-le/student-performance-predict)
+
 ## 1. 이 프로젝트를 하게 된 이유
 
 최근 발전하고 있는 산업에서 빅데이터는 가장 큰 주목을 받고 있다. 우리가 흔히 알고 있는 대기업들 또한 빅데이터를 활용하는 것을 어렵지 않게 볼 수 있다.
