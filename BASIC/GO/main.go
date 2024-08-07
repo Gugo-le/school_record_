@@ -6,7 +6,7 @@ import (
 )
 
 func lenAndUpper(name string) (length int, uppercase string) {
-	defer fmt.Println("I'm done")
+	defer fmt.Println("I'm done") // function이 끝난 수 실행됨
 	length = len(name)
 	uppercase = strings.ToUpper(name)
 	return
