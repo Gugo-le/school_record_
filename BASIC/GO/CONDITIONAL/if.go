@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func canIDrink(age int) bool {
-	if koreanAge := age + 2; koreanAge < 18 {
+	if koreanAge := age + 2; koreanAge < 18 { // variable expression
 		return false
 	}
 	return true
