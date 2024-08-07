@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func superAdd(numbers ...int) int {
-	for number := range numbers {
+	for number := range numbers { // range는 인덱스를 줌
 		fmt.Println(number)
 	}
 	return 1
