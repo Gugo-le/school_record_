@@ -106,3 +106,19 @@ class Node:
         if len(other_blockchain.chain) > len(self.blockchain.chain) and other_blockchain.is_chain_valid():
             self.blockchain = other_blockchain
 
+# 여러 노드가 있을 때의 예제
+node1 = Node()
+node2 = Node()
+
+# Node1에서 거래와 채굴 진행
+node1.blockchain.create_transaction({"from": "Alice", "to": "Bob", "amount": 50})
+node1.blockchain.mine_pending_transactions(miner_address="Miner1")
+
+# Node2가 Node1의 블록체인 데이터를 받아와 업데이트
+node2.receive_blockchain(node1.blockchain)
+
+print("Node1 Blockchain:")
+print(node1.blockchain)
+
+print("Node2 Blockchain (after receiving from Node1):")
+print(node2.blockchain)
