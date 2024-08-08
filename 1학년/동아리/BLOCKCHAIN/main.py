@@ -34,6 +34,10 @@ print(initial_block.block_data)
 print(initial_block.block_hash)
 
 second_block = BansongCoinBlock(initial_block.block_hash, [t3, t4])
-
 print(second_block.block_data)
 print(second_block.block_hash)
+
+third_block = BansongCoinBlock(second_block.block_hash, [t5, t6])
+
+print(third_block.block_data)
+print(third_block.block_hash)
