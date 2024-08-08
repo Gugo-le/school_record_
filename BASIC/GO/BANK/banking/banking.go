@@ -1,6 +1,7 @@
 package banking
 
-type BankAccount struct {
+// Account struct
+type Account struct {
 	owner   string
 	balance int
 }
