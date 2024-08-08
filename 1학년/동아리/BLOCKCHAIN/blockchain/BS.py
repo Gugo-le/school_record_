@@ -22,7 +22,7 @@ class Block:
 
 # 블록체인 클래스 정의
 class Blockchain:
-    def __init__(self, difficulty=2):
+    def __init__(self, difficulty=20):
         self.chain = [self.create_genesis_block()]
         self.difficulty = difficulty
         self.pending_transactions = []
