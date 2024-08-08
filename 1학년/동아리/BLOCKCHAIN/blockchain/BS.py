@@ -85,3 +85,12 @@ bansongcoin.mine_pending_transactions(miner_address="Miner1")
 print("Blockchain after mining a block:")
 print(bansongcoin)
 
+# 두 번째 거래 생성 및 채굴
+bansongcoin.create_transaction({"from": "Alice", "to": "Bob", "amount": 30})
+bansongcoin.create_transaction({"from": "Charlie", "to": "Bob", "amount": 15})
+
+bansongcoin.mine_pending_transactions(miner_address="Miner1")
+
+print("Blockchain after mining a second block:")
+print(bansongcoin)
+
