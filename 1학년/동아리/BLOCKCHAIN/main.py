@@ -28,4 +28,7 @@ t4 = "Daniel sends 0.3 BC to Anna"
 t5 = "Mike sends 1 BC to Charlie"        
 t6 = "Mike sends 5.4 BC to Daniel"      
 
-         
+initial_block = BansongCoinBlock("Initial String", [t1, t2])
+
+print(initial_block.block_data)
+print(initial_block.block_hash)
