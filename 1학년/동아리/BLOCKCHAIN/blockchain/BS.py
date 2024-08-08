@@ -94,3 +94,15 @@ bansongcoin.mine_pending_transactions(miner_address="Miner1")
 print("Blockchain after mining a second block:")
 print(bansongcoin)
 
+# 블록체인 유효성 검사
+print("Is the blockchain valid?", bansongcoin.is_chain_valid())
+
+# 노드 클래스 정의
+class Node:
+    def __init__(self):
+        self.blockchain = Blockchain()
+
+    def receive_blockchain(self, other_blockchain):
+        if len(other_blockchain.chain) > len(self.blockchain.chain) and other_blockchain.is_chain_valid():
+            self.blockchain = other_blockchain
+
