@@ -21,4 +21,11 @@ class BansongCoinBlock:
         self.block_data = "-".join(tranction_list) + "-" + previous_block_hash
         self.block_hash = hashlib.sha256(self.block_data.encode()).hexdigest()
         
-      
+t1 = "Anna sends 2 BC to Mike" 
+t2 = "Bob sends 4.1 BC to Mike"        
+t3 = "Mike sends 3.2 BC to Bob"        
+t4 = "Daniel sends 0.3 BC to Anna"        
+t5 = "Mike sends 1 BC to Charlie"        
+t6 = "Mike sends 5.4 BC to Daniel"      
+
+         
