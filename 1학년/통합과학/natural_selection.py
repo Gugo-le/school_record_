@@ -1,248 +1,102 @@
-from math import sqrt
+import pygame
 import random
+import math
 
+# 초기화
+pygame.init()
 
-class Cell():
-    def __init__(self, x=None, y=None, v=5, sensing_dist=50):
-        if x is None and y is None:
-            r = random(0, 1)
-                
-            if r < 0.25: # top
-                self.x = random(50, W - 50)
-                self.y = random(50, 100)
-            elif r < 0.5: # bottom
-                self.x = random(50, W - 50)
-                self.y = random(H - 100, H - 50)
-            elif r < 0.75: # right
-                self.x = random(W - 100, W - 50)
-                self.y = random(50, H - 50)
-            else: # left
-                self.x = random(50, 100)
-                self.y = random(50, H - 50)
-        else:
-            self.x = x
-            self.y = y
+# 화면 크기 설정
+W, H = 800, 600
+screen = pygame.display.set_mode((W, H))
 
-        # gene
-        self.v = v
-        self.sensing_dist = sensing_dist
-        
-        self.status = 'stopped' # (stopped, moving, staying)
-        self.staying_time = 0
-        self.n_foods = 0
-        
-    def move_to(self, dst_x, dst_y):
-        dist = sqrt((dst_x - self.x) ** 2 + (dst_y - self.y) ** 2)
-        
-        if dist < self.v:
-            self.x = dst_x
-            self.y = dst_y
-        else:
-            dist_x = (dst_x - self.x) * self.v
-            dist_y = (dst_y - self.y) * self.v
-            
-            self.x += dist_x / dist
-            self.y += dist_y / dist
-                
-    def move(self):
-        if self.status == 'moving':
-            dist = sqrt((self.dst_x - self.x) ** 2 + (self.dst_y - self.y) ** 2)
-        
-            if dist < self.v:
-                self.x = self.dst_x
-                self.y = self.dst_y
-                
-                self.status = 'stopped'
-            else:
-                dist_x = (self.dst_x - self.x) * self.v
-                dist_y = (self.dst_y - self.y) * self.v
-                
-                self.x += dist_x / dist
-                self.y += dist_y / dist
-                
-    def decide_status(self):
-        if self.status == 'stopped':
-            r = random(0, 1)
-            if r < 0.9:
-                self.status = 'moving'
-                self.dst_x = random(50, W - 50)
-                self.dst_y = random(50, H - 50)
-            else:
-                self.status = 'staying'
-                self.staying_time = millis() + int(random(500, 1500))
-                
-        elif self.status == 'staying':
-            if millis() > self.staying_time:
-                self.status = 'stopped'
-                
-    def check_collision(self):
-        for food in foods:
-            if food.status == 'eaten':
-                continue
-
-            dist = sqrt((food.x - self.x) ** 2 + (food.y - self.y) ** 2)
-            
-            if dist <= self.sensing_dist:
-                self.status = 'moving'
-                self.dst_x = food.x
-                self.dst_y = food.y
-            
-            if dist < 30:
-                food.status = 'eaten'
-                self.n_foods += 1
-                manager.alive_foods -= 1
-                break
-            
-    def evolve(self):
-        if random(0, 1) < 0.5:
-            if random(0, 1) < 0.5:
-                self.v += 1
-            else:
-                self.sensing_dist += 10
-        else:
-            if random(0, 1) < 0.5:
-                self.v -= 1
-            else:
-                self.sensing_dist -= 10 
-        
-    def display(self):
-        stroke(255)
-        ellipseMode(CENTER)
-        noFill()
-        ellipse(self.x, self.y, self.sensing_dist * 2, self.sensing_dist * 2)
-
-        noStroke()
-        ellipseMode(CENTER)
-        fill(255, 255, 0)
-        ellipse(self.x, self.y, 50, 50)
-        
-        fill(0)
-        textSize(20)
-        textAlign(CENTER)
-        text('%d' % (self.v), self.x, self.y)
-        
-        
-class Food():
+# 셀과 음식 클래스 정의
+class Cell:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.status = 'alive'
-        
-    def display(self):
-        if self.status != 'eaten':
-            shapeMode(CENTER)
-            fill(0, 240, 100)
-            triangle(self.x, self.y - 10, self.x - 10, self.y + 10, self.x + 10, self.y + 10)
-            
-class Manager():
-    def __init__(self):
-        self.alive_cells = N_CELLS
-        self.alive_foods = N_FOODS
-        self.generation = 0
-        self.avg_speed = 5
-        self.avg_sensing_dist = 50
-    
-    def reset(self):
-        global foods, cells, N_FOODS
-        
-        self.generation += 1
-        N_FOODS -= 1
-        self.alive_foods = N_FOODS
+        self.radius = 20
+        self.color = (255, 255, 0)
+        self.velocity_x = random.uniform(-1, 1)  # 초기 속도 설정
+        self.velocity_y = random.uniform(-1, 1)
 
-        foods = []
-        
-        for i in range(N_FOODS):
-            foods.append(Food(x=random(200, W - 200), y=random(200, H - 200)))
-        
-        if manager.generation > 1:
-            new_cells = []
+    def move(self):
+        self.x += self.velocity_x
+        self.y += self.velocity_y
 
-            for i, cell in enumerate(reversed(cells)):
-                if cell.n_foods == 0: # dead
-                    del cells[self.alive_cells - i - 1]
-                    continue
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)
 
-                if cell.n_foods >= 2: # replicate
-                    new_cells.append(Cell(
-                        v=cell.v,
-                        sensing_dist=cell.sensing_dist
-                    ))
+class Food:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.radius = 10
+        self.color = (0, 240, 100)
 
-                if cell.n_foods >= 1:
-                    cell.evolve()
-                    
-                    
-                cell.n_foods = 0
-                
-                r = random(0, 1)
-                
-                if r < 0.25:
-                    cell.x = random(50, W - 50)
-                    cell.y = random(50, 100)
-                elif r < 0.5:
-                    cell.x = random(50, W - 50)
-                    cell.y = random(H - 100, H - 50)
-                elif r < 0.75:
-                    cell.x = random(W - 100, W - 50)
-                    cell.y = random(50, H - 50)
-                else:
-                    cell.x = random(50, 100)
-                    cell.y = random(50, H - 50)
-                    
-            cells.extend(new_cells)
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)
 
-            self.alive_cells = len(cells)
-        else:
-            for i in range(N_CELLS):
-                cells.append(Cell())
-                
-        self.compute_avgs()
-                
-    def compute_avgs(self):
-        sum_speed = 0
-        sum_sensing_dist = 0
+# 충돌 감지 함수
+def check_collision(cell, food):
+    distance = math.sqrt((cell.x - food.x) ** 2 + (cell.y - food.y) ** 2)
+    return distance < (cell.radius + food.radius)
 
-        for cell in cells:
-            sum_speed += cell.v
-            sum_sensing_dist += cell.sensing_dist
-        
-        if len(cells):
-            self.avg_speed = float(sum_speed) / float(len(cells))
-            self.avg_sensing_dist = float(sum_sensing_dist) / float(len(cells))
-
-# main
-N_FOODS = 20
-N_CELLS = 20
-W, H = 1920, 1080
-
-manager = Manager()
-
-foods, cells = [], []
-manager.reset()
-
-def setup():
-    frameRate(60)
-    size(W, H)
-    
-def draw():
-    background(127)
-    
-    fill(255)
-    textAlign(LEFT)
-    textSize(24)
-    text('Generation %d' % manager.generation, 20, 30)
-    text('Cells %d' % manager.alive_cells, 20, 60)
-    text('Avg. Speed %.2f' % manager.avg_speed, 20, 90)
-    text('Avg. Sensing Dist %.2f' % manager.avg_sensing_dist, 20, 120)
-
-    if manager.alive_foods == 0:
-        manager.reset()
+# 공간 분할 기법 구현
+def spatial_partition(cells, foods, cell_size):
+    grid = {}
+    for cell in cells:
+        grid_key = (int(cell.x // cell_size), int(cell.y // cell_size))
+        if grid_key not in grid:
+            grid[grid_key] = []
+        grid[grid_key].append(cell)
 
     for food in foods:
-        food.display()
-        
+        grid_key = (int(food.x // cell_size), int(food.y // cell_size))
+        if grid_key not in grid:
+            grid[grid_key] = []
+        grid[grid_key].append(food)
+
+    return grid
+
+# 셀과 음식 생성
+cells = [Cell(random.randint(100, W-100), random.randint(100, H-100)) for _ in range(5)]
+foods = [Food(random.randint(100, W-100), random.randint(100, H-100)) for _ in range(5)]
+
+# 메인 루프
+running = True
+cell_size = 50  # 공간 분할을 위한 그리드 크기
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill((127, 127, 127))
+
+    # 이동
     for cell in cells:
-        cell.decide_status()
         cell.move()
-        cell.check_collision()
-        cell.display()
+        cell.draw(screen)
+
+    # 공간 분할
+    grid = spatial_partition(cells, foods, cell_size)
+
+    # 충돌 체크
+    for grid_key in grid:
+        objects = grid[grid_key]
+        for i in range(len(objects)):
+            for j in range(i + 1, len(objects)):
+                if isinstance(objects[i], Cell) and isinstance(objects[j], Food):
+                    if check_collision(objects[i], objects[j]):
+                        print(f"Collision detected between Cell at ({objects[i].x}, {objects[i].y}) and Food at ({objects[j].x}, {objects[j].y})")
+                        # 음식의 상태 업데이트 예시
+                        foods.remove(objects[j])  # 음식 삭제 (이벤트 발생)
+
+    # 음식 그리기
+    for food in foods:
+        food.draw(screen)
+
+    pygame.display.flip()
+    pygame.time.delay(50)
+
+pygame.quit()
